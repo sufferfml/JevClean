@@ -1,0 +1,48 @@
+{
+  "name": "jevclean",
+  "productName": "JevClean",
+  "version": "0.2.0",
+  "description": "Local IMAP cleanup with natural-language rules and your own Jev key.",
+  "private": true,
+  "license": "MIT",
+  "author": "JevClean contributors",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "npm run build && npm start",
+    "build": "vite build && node scripts/build.mjs",
+    "start": "node dist/server.cjs",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test tests/*.test.ts",
+    "test:ui": "npm run build && playwright test",
+    "test:quality": "tsx scripts/check-quality.ts",
+    "test:native": "tsx scripts/check-keyring.ts",
+    "test:menu": "node scripts/check-mac-launcher.mjs",
+    "check": "npm run typecheck && npm test && npm run build",
+    "pack:mac": "npm run check && node scripts/pack-mac.mjs",
+    "test:package": "node scripts/smoke-package.mjs"
+  },
+  "dependencies": {
+    "@napi-rs/keyring": "2.1.0",
+    "@phosphor-icons/react": "^2.1.10",
+    "imapflow": "^2.2.1",
+    "mailparser": "^3.9.33",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@types/mailparser": "^3.4.6",
+    "@types/node": "^24.10.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^5.1.4",
+    "esbuild": "^0.28.2",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.2"
+  }
+}

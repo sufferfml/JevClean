@@ -1,0 +1,57 @@
+# JevClean
+
+<!-- impeccable:product-schema 1 -->
+
+## Platform
+
+web
+
+The macOS launcher opens a local browser interface. The interface remains a web application, backed by a loopback-only Node. js process.
+
+## Users
+
+Individuals periodically organizing an existing personal IMAP mailbox, including people without programming knowledge. The current user uses multiple addresses belonging to one person.
+
+## Product Purpose
+
+Configure the API, language and mailbox, select scope and natural-language rules, then start Jev analysis and confirm bulk rule actions. Manual action controls remain available for loaded mail without depending on AI confidence. Success means users can understand which messages will change, why, and how to verify or undo the latest batch.
+
+## Capabilities and Constraints
+
+- One configured IMAP account, multiple selected folders, latest N messages or all messages.
+- Multiple accounts are explicitly deferred. The header shows the latest connection verification for the saved account and credentials, alongside an application menu with local-service status and a busy-disabled shutdown control.
+- Common selectable presets and editable natural-language conditions. Each rule has exactly one action: delete, archive, move, junk, read, unread, star, unstar, or keep.
+- The permanent left sidebar exposes every rule’s checkbox, title and action. Detailed conditions are collapsed by default and have an independent Expand/Collapse button inside each rule. The sidebar and rule list remain visible. The filtering section has one Manage rules entry; adding and editing occur in rule management, where complete conditions remain visible. New rules require title and conditions and are prepended.
+- Analysis folder and rule selections, scope, valid message count and text-sharing consent save automatically. Failures keep the selection and offer retry; unrelated settings drafts require a full-form save, which also occurs before analysis. New unsaved rule IDs are excluded from the scoped autosave request until that full save.
+- The macOS menu bar provides local runtime status, Open, Restart and Quit. Active tasks prevent restart and quit; later opens display the browser even when the first launch used `--no-open`.
+- Chinese and English UI, selected on the separate 显示语言 settings page. Display language never rewrites mail content, rule titles or conditions, mailbox paths, or model input.
+- Users supply their own Jev API key. Credentials and reports stay encrypted locally; necessary mail text is sent directly to Jev after consent.
+- Before reading message bodies or calling Jev, read-only preflight checks every enabled action, its destination and server capabilities. Delete, archive and junk use an explicit mapping, authoritative mailbox-purpose metadata, or one unambiguous recognized folder name; unresolved destinations open the repair section in Settings → Organizing rules, without creating folders. Successful save/recheck returns to mail. The mail pane keeps destination hints only.
+- “开始分析” is the single loading-and-analysis entry and requires API setup, enabled rules and text-sharing consent. The core header-only `read-mail` compatibility API remains, but there is no separate UI read action. Unclassified loaded mail remains manually selectable.
+- All known-location mail is selectable, including Keep, Needs review and unresolved rule conflicts. Explicit manual delete, archive, move, junk and flag actions need no Jev calls or probability threshold. A counted destination check precedes confirmation. Manual actions preserve AI evidence and record their source and actual action separately.
+- AI judgment and executability are separate. Four tabs are always used for analysis results: “符合规则”, “待查看”, “暂不整理”, “全部邮件”. Matched classification does not disappear after execution; completed, undone, unknown and already-satisfied states remain separate. Needs review includes unclassified records and unresolved highest-priority conflicts. The non-matched tab also includes explicit preservation judgments, with the reason visible per message.
+- For complete non-keep rule matches, priority is delete > junk > move > archive > all flag actions. Equivalent highest-priority action/destination pairs merge; differing pairs at that level require a choice. An exception excludes only its own ordinary rule. Only an explicit keep-action rule protects globally; uncertain global protection requires review. Ordinary uncertainty cannot veto another complete match. Both initial classification and destination replanning use the same merger. Version 8 invalidates older rule authorization without invalidating manual processing or undo; existing configurations must acknowledge the semantics before new analysis, without automatically rewriting rules.
+- Destination-only changes preserve existing judgments. Saving and checking configuration refreshes execution readiness without another Jev call; account, conditions, action or analysis-scope changes require AI classification again before rule processing. Rule changes do not prevent manual actions on the same account.
+- Analysis is read-only. Mutations require explicit selection and confirmation. Delete moves to Trash; permanent deletion is outside scope.
+- Progress, verification of positions and flags, persistent undo for the latest batch, privacy information, and redacted operation logs.
+- Progress follows the actual stage, including automatic verification. The operation's email count remains distinct from each folder's read-only email-list entry count, with the folder named and no additional Jev calls or email actions implied.
+- Cross-report operation synchronization requires account plus complete folder/UIDVALIDITY/UID identity and fingerprint consistency; matching header fingerprints alone cannot merge physical copies.
+- Preserve protocol validation, rule-policy staleness checks, conflict resolution, and encrypted recovery records. Manual authorization comes from an explicit checked user plan, not manufactured AI confidence. Unknown prior operations must be checked before another batch replaces undo.
+- No cloud backend, telemetry, remote frontend assets, mail composition, background schedules, or OAuth login.
+- Rule questions use match/not_match/uncertain without supplying configured action or destination fields. The 0.80 condition/time gate remains; weak not_match is uncertainty, and no complete match never grants execution. New prompts have not received real-model quality validation.
+- Independent local Analysis details show historical rules, model condition/time choices and probabilities, program decisions and each request attempt. Basic evidence contains no body context. Optional separately encrypted full traces retain the actual request and received responses for the latest batch, at most 7 days/50 MiB with a 1 MiB response limit. Credentials are excluded; expired traces are cleaned on startup/access, or next startup when the app was closed. Clearing/disabling traces preserves basic judgments and undo. Missing historical evidence is never reconstructed.
+- Failed-analysis retry is limited to unfinished judgments with a v8 inputHash, within 7 days and with unchanged account, rules, scope and actual input. It appends attempts and does not rerun successful or merely uncertain judgments. Retry can consume Jev credits; it never retries email mutations.
+
+## Operating Context
+
+The user explicitly chose the PreVibe desktop client default light style. A 48px header frames a permanent 320px analysis sidebar and continuous mail workspace. At 1100px and below the sidebar becomes 240px; the two-pane workspace remains at least 760px wide and is horizontally accessible in narrow windows. The sidebar content and mail pane scroll independently. The analysis button remains in the sidebar footer. Folder scope, every rule’s checkbox/title/action and consent remain visible. Choose folders, Mail range and Filtering rules share heading typography; there are no extra Analysis settings or Current scope headings. Each rule’s detailed description starts collapsed and can be expanded independently; Manage rules is the only rule-management entry in the sidebar.
+
+Settings has five separate pages, ordered 分析服务, 邮箱设置, 显示语言, 管理规则, 隐私记录; first use and the default settings entry open 分析服务. API, mailbox and language controls are no longer combined. All pages share the existing configuration, credential and rule drafts; switching pages preserves them, while Save and Return to mail keep their existing behavior. This adds no routes or services. One “开始分析” button reads and analyzes the configured scope without modifying mail. The mail toolbar always exposes all eight manual actions plus a fixed-label “整理” button. Organize is enabled only in the matched tab with a valid selected executable subset, then opens a native dialog for explicit confirmation. Rule review shows actual counts, actions and destinations without repeating the main selected-mail list; excluded counts and reasons remain when necessary. Manual actions retain their own checked plan and per-message review. The modal initially focuses Cancel, makes the background inert and restores trigger focus on Cancel or Escape.
+
+Loading a valid analysis, completing analysis, or returning to the matched tab selects currently executable matched mail by default. Users can deselect; switching tabs clears selection and search. Changing local subject/sender search deselects nonmatching mail, and clearing search does not reselect it. The toolbar retains the selected count without View selected or Clear selection buttons. Separate plaintext reading preserves selection and returns keyboard focus and the mail pane’s scroll position. AI evidence, actual operation state, unknown-result verification and latest-batch undo remain separate.
+
+Analysis metadata displays only time and recorded successful-analysis token totals, with an accounting caveat. Analysis details additionally display known usage per attempt, including failures where reported; missing usage is unknown, never presented as free. Privacy information, optional trace controls and logs remain in Privacy & records; neither main surface repeats them in a footer.
+
+The 2026-10-08 v8 semantics, local analysis details, opt-in traces and constrained failed-analysis retry are implemented; final integrated checks and installed-app verification remain to be recorded for this round. Earlier evidence below does not validate these changes or the new model prompts.
+
+The earlier 2026-10-07 AI-first revision passed type checking, 155 core/HTTP/TLS tests, the production build and all 32 browser flows. After the final conflict-selection fix, 2 targeted browser regressions plus type checking/build passed; synthetic 1440px desktop and 390px narrow-window captures were updated. Native-menu and production-package smoke checks passed with isolated data and mock credentials. The installed /Applications/JevClean.app was replaced and started, served resources matched the build, and the actual Arc page was visually checked. Encrypted settings, report and latest-action files retained identical hashes. These results describe the earlier version, not the subsequent simplification and modal revision; each round is recorded separately in docs/product-design-review-2026-10-06.md. This does not establish real-user comprehension, real-provider compatibility or model quality.
